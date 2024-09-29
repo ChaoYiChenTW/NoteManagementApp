@@ -18,12 +18,14 @@ services:
     image: python:3.12-slim
     container_name: note_management_api
     working_dir: /app
+    env_file:
+      - .env
     volumes:
       - ./backend:/app
     ports:
       - "8888:8000"
     environment:
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
       - MONGODB_URL=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}
     depends_on:
       - postgres
@@ -31,6 +33,7 @@ services:
     networks:
       - note_management_network
     tty: true
+    # command: bash -c "pip install -r requirements.txt && fastapi dev main.py --host 0.0.0.0 --reload"
 
   postgres:
     image: postgres:13
